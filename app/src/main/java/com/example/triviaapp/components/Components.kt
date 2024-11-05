@@ -109,7 +109,7 @@ fun QuestionDisplay(
                             .clip(RoundedCornerShape(topStartPercent = 50, topEndPercent = 50, bottomStartPercent = 50, bottomEndPercent = 50))
                             .background(Color.Transparent)
                     ){
-
+//                        TODO 다음 작업 필요
                     }
                 }
             }
