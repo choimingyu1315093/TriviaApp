@@ -7,6 +7,5 @@ import com.example.triviaapp.components.QuestionDisplay
 
 @Composable
 fun TriviaHome(viewModel: QuestionViewModel = hiltViewModel()){
-    QuestionDisplay()
-//    Question(viewModel)
+    Question(viewModel)
 }
