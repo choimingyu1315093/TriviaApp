@@ -60,9 +60,14 @@ fun Question(viewModel: QuestionViewModel){
         mutableStateOf(0)
     }
 
-
     if(viewModel.data.value.loading == true){
-        CircularProgressIndicator()
+        Column (
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            CircularProgressIndicator()
+        }
         Log.d(TAG, "Question: Loading...")
     }else {
         val question = try {
@@ -100,14 +105,14 @@ fun QuestionDisplay(
         mutableStateOf<Int?>(null)
     }
 
-    val collectAnswerState = remember(question){
+    val correctAnswerState = remember(question){
         mutableStateOf<Boolean?>(null)
     }
 
     val updateAnswer: (Int) -> Unit = remember(question){
         {
             answerState.value = it
-            collectAnswerState.value = choicesState[it] == question.answer
+            correctAnswerState.value = choicesState[it] == question.answer
         }
     }
 
@@ -127,7 +132,7 @@ fun QuestionDisplay(
                 ShowProgress(score = questionIndex.value)
             }
             QuestionTracker(
-                counter = questionIndex.value,
+                counter = questionIndex.value + 1,
                 outOff = viewModel.getTotalQuestionCount()
             )
             DrawDottedLine(PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f))
@@ -166,7 +171,7 @@ fun QuestionDisplay(
                             modifier = modifier
                                 .padding(16.dp),
                             colors = RadioButtonDefaults.colors(
-                                selectedColor = if(collectAnswerState.value == true && index == answerState.value){
+                                selectedColor = if(correctAnswerState.value == true && index == answerState.value){
                                     Color.Green.copy(alpha = 0.2f)
                                 }else {
                                     Color.Red.copy(alpha = 0.2f)
@@ -177,9 +182,9 @@ fun QuestionDisplay(
                             withStyle(
                                 style = SpanStyle(
                                     fontWeight = FontWeight.Light,
-                                    color = if(collectAnswerState.value == true && index == answerState.value){
+                                    color = if(correctAnswerState.value == true && index == answerState.value){
                                         Color.Green
-                                    }else if(collectAnswerState.value == false && index == answerState.value){
+                                    }else if(correctAnswerState.value == false && index == answerState.value){
                                         Color.Red
                                     }else {
                                         AppColors.mOffWhite
@@ -199,6 +204,8 @@ fun QuestionDisplay(
                 Button(
                     onClick = {
                         onNextClicked(questionIndex.value)
+                        answerState.value = null
+                        correctAnswerState.value = null
                     },
                     modifier = modifier
                         .padding(3.dp)
